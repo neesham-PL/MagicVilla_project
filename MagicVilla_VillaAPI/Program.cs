@@ -1,7 +1,12 @@
+
 using MagicVilla_VillaAPI;
 using MagicVilla_VillaAPI.Data;
+using MagicVilla_VillaAPI.Models;
 using MagicVilla_VillaAPI.Repository;
 using MagicVilla_VillaAPI.Repository.IRepository;
+using MagicVilla_VillaAPI.Repository.IRepostiory;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -13,45 +18,46 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 });
-//builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-//    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddResponseCaching();
 builder.Services.AddScoped<IVillaRepository, VillaRepository>();
-//builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IVillaNumberRepository, VillaNumberRepository>();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
-//builder.Services.AddApiVersioning(options => {
-//    options.AssumeDefaultVersionWhenUnspecified = true;
-//    options.DefaultApiVersion = new ApiVersion(1, 0);
-//    options.ReportApiVersions = true;
-//});
-//builder.Services.AddVersionedApiExplorer(options =>
+builder.Services.AddApiVersioning(options =>
+{
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.ReportApiVersions = true;
+});
+builder.Services.AddVersionedApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true;
+});
+
+
+var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
+
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+});
+//.AddJwtBearer(x =>
 //{
-//    options.GroupNameFormat = "'v'VVV";
-//    options.SubstituteApiVersionInUrl = true;
+//    x.RequireHttpsMetadata = false;
+//    x.SaveToken = true;
+//    x.Authority = "https://localhost:7003/";
+//    x.TokenValidationParameters = new TokenValidationParameters
+//    {
+//        ValidateIssuerSigningKey = true,
+//        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
+//        ValidateIssuer = false,
+//        ValidateAudience = false
+//    };
 //});
-
-
-// var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
-
-//builder.Services.AddAuthentication(x =>
-//{
-//    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//})
-//    .AddJwtBearer(x =>
-//    {var
-//        x.RequireHttpsMetadata = false;
-//        x.SaveToken = true;
-//        x.Authority = "https://localhost:7003/";
-//        x.TokenValidationParameters = new TokenValidationParameters
-//        {
-//            ValidateIssuerSigningKey = true,
-//            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
-//            ValidateIssuer = false,
-//            ValidateAudience = false
-//        };
-//    });
 
 //builder.Services.AddAuthorization(options =>
 //{

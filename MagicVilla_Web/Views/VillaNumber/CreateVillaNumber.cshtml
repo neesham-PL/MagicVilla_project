@@ -1,4 +1,5 @@
 ﻿@model MagicVilla_Web.Models.VM.VillaNumberCreateVM
+
 <form asp-action="CreateVillaNumber">
     <br />
     <div class="container border p-3">
@@ -32,7 +33,7 @@
                 <textarea asp-for="VillaNumber.SpecialDetails" class="form-control" rows="5"></textarea>
                 <span asp-validation-for="VillaNumber.SpecialDetails" class="text-danger"></span>
             </div>
-
+           
             <div class="col-5 offset-2">
                 <a asp-action="IndexVillaNumber" asp-controller="VillaNumber" class="btn-primary btn form-control ">Back to List</a>
             </div>

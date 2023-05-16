@@ -12,6 +12,8 @@ namespace MagicVilla_VillaAPI.Controllers
 {
     [Route("api/VillaNumberAPI")]  //[Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
+
     public class VillaNumberAPIController : ControllerBase
     {
         //private readonly ILogging _logger;
@@ -81,7 +83,7 @@ namespace MagicVilla_VillaAPI.Controllers
             return _response;
         }
         [HttpPost]
-
+        //[Authorize(Roles = "admin")]
         public async Task<ActionResult<APIResponse>> CreateVillaNumber([FromBody] VillaNumberCreateDTO createDTO)
         {
             //if(!ModelState.IsValid)
@@ -131,7 +133,7 @@ namespace MagicVilla_VillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete("{id = int}", Name = "DeleteVillaNumber")]
-
+        //[Authorize(Roles = "admin")]
         public async Task<ActionResult<APIResponse>> DeleteVillaNumber(int id)
         {
             try
@@ -162,6 +164,7 @@ namespace MagicVilla_VillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[Authorize(Roles = "admin")]
         public async Task<ActionResult<APIResponse>> UpdateNumberVilla(int id, [FromBody] VillaNumberUpdateDTO updateDTO)
         {
             try
