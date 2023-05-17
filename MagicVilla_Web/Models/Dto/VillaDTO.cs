@@ -6,7 +6,7 @@ public class VillaDTO
 {
     public int Id { get; set; }
     [Required]
-    [MaxLength(30)]
+    [MaxLength(30, ErrorMessage = "Max length is 30 chars")]
 
     public string Name { get; set; }
     public string Details { get; set; }
